@@ -3,10 +3,14 @@ body{
   padding: 0;
 }
 #canvas{
-  background: gray;
+  background: #f3f3f3;
+  height: 100vh;
+  position: relative;
 }
-button{
-  position: fixed;
-  bottom: 0;
-  left: 0;
+#canvas > div{
+height: 6px;
+width: 6px;
+border-radius: 50%;
+background: black;
+position: absolute;
 }
