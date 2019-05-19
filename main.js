@@ -1,20 +1,45 @@
 var canvas = document.getElementById('canvas')
 var context = canvas.getContext('2d');
 
-var eraserEnabled = false // 状态锁
-
-eraser.onclick = function () {
-  eraserEnabled = true;
-  actions.className = 'actions x'
-}
-brush.onclick = function () {
-  eraserEnabled = false;
-  actions.className = 'actions'
-}
-
 autoSetCanvasSize(canvas)
 
 listenToUser(canvas)
+
+var eraserEnabled = false // 状态锁
+pen.onclick = function () {
+  eraserEnabled = false
+  pen.classList.add('active')
+  eraser.classList.remove('active')
+}
+eraser.onclick = function () {
+  eraserEnabled = true
+  eraser.classList.add('active')
+  pen.classList.remove('active')
+}
+
+black.onclick = function () {
+  context.strokeStyle = 'black'
+  strokeColor(black, red, green, blue)
+}
+red.onclick = function () {
+  context.strokeStyle = 'red'
+  strokeColor(red, black, green, blue)
+}
+green.onclick = function () {
+  context.strokeStyle = 'green'
+  strokeColor(green, black, red, blue)
+}
+blue.onclick = function () {
+  context.strokeStyle = 'blue'
+  strokeColor(blue, black, red, green)
+}
+
+function strokeColor(addClass, rmClass1, rmClass2, rmClass3) {
+  addClass.classList.add('active')
+  rmClass1.classList.remove('active')
+  rmClass2.classList.remove('active')
+  rmClass3.classList.remove('active')
+}
 
 function listenToUser(canvas) {
   var lastPoint = { x: undefined, y: undefined }
@@ -83,9 +108,8 @@ function listenToUser(canvas) {
 // 画线
 function drawLine(x1, y1, x2, y2) { // x,y相对于画布的位置
   context.beginPath()
-  context.moveTo(x1, y1)
   context.lineWidth = 4
-  context.strokeStyle = 'red'
+  context.moveTo(x1, y1)
   context.lineTo(x2, y2)
   context.closePath()
   context.stroke()
