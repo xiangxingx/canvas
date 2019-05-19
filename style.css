@@ -6,7 +6,7 @@ body{
   overflow: hidden;
 }
 ul,ol{
-  list-style: none; /*  */
+  list-style: none;
 }
 .icon {
   width: 1.5em; height: 1.5em;
@@ -26,11 +26,11 @@ ul,ol{
   left: 8px;
   padding: 12px;
 }
-#actions > svg{
+.actions > svg{
   transition: all 0.3s;
   margin: 0 6px;
   }
-#actions > svg.active{
+.actions > svg.active{
   fill: red;
   transform: scale(1.2);
   }

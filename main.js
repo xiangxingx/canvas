@@ -1,15 +1,13 @@
 var canvas = document.getElementById('canvas')
 var context = canvas.getContext('2d');
+var eraserEnabled = false
 
 autoSetCanvasSize(canvas)
-
 listenToUser(canvas)
+setPenColor()
 
-var eraserEnabled = false // 状态锁
 pen.onclick = function () {
-  eraserEnabled = false
-  pen.classList.add('active')
-  eraser.classList.remove('active')
+  usePen()
 }
 eraser.onclick = function () {
   eraserEnabled = true
@@ -19,45 +17,18 @@ eraser.onclick = function () {
 clear.onclick = function () {
   context.clearRect(0, 0, canvas.width, canvas.height)
 }
-download.onclick = function (){
+download.onclick = function () {
   var url = canvas.toDataURL('image/png')
   var a = document.createElement('a')
   document.body.appendChild(a)
   a.href = url
-  a.download = 'My Paint' 
+  a.download = 'My Paint'
   a.click()
 }
 
-
-black.onclick = function () {
-  context.strokeStyle = 'black'
-  strokeColor(black, red, green, blue)
-}
-red.onclick = function () {
-  context.strokeStyle = 'red'
-  strokeColor(red, black, green, blue)
-}
-green.onclick = function () {
-  context.strokeStyle = 'green'
-  strokeColor(green, black, red, blue)
-}
-blue.onclick = function () {
-  context.strokeStyle = 'blue'
-  strokeColor(blue, black, red, green)
-}
-
-function strokeColor(addClass, rmClass1, rmClass2, rmClass3) {
-  addClass.classList.add('active')
-  rmClass1.classList.remove('active')
-  rmClass2.classList.remove('active')
-  rmClass3.classList.remove('active')
-}
-
-
-
 function listenToUser(canvas) {
   var lastPoint = { x: undefined, y: undefined }
-  var using = false // 状态锁，用状态控制事件的发生
+  var using = false
 
   // 特性检测
   if (document.body.ontouchstart !== undefined) {
@@ -140,4 +111,36 @@ function autoSetCanvasSize(canvas) {
     canvas.width = pageWidth
     canvas.height = pageHeight
   }
+}
+// 设置画笔颜色
+function setPenColor() {
+  black.onclick = function () {
+    context.strokeStyle = 'black'
+    chooseColor(black, red, green, blue)
+  }
+  red.onclick = function () {
+    context.strokeStyle = 'red'
+    chooseColor(red, black, green, blue)
+  }
+  green.onclick = function () {
+    context.strokeStyle = 'green'
+    chooseColor(green, black, red, blue)
+  }
+  blue.onclick = function () {
+    context.strokeStyle = 'blue'
+    chooseColor(blue, black, red, green)
+  }
+  function chooseColor(addClass, rmClass1, rmClass2, rmClass3) {
+    addClass.classList.add('active')
+    rmClass1.classList.remove('active')
+    rmClass2.classList.remove('active')
+    rmClass3.classList.remove('active')
+    usePen()
+  }
+}
+//使用画笔
+function usePen() {
+  eraserEnabled = false
+  pen.classList.add('active')
+  eraser.classList.remove('active')
 }
