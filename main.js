@@ -26,65 +26,38 @@ download.onclick = function () {
   a.click()
 }
 
+var lastPoint = { x: undefined, y: undefined }
 function listenToUser(canvas) {
-  var lastPoint = { x: undefined, y: undefined }
   var using = false
-
   // 特性检测
   if (document.body.ontouchstart !== undefined) {
     canvas.ontouchstart = function (ev) {
       using = true
       var x = ev.touches[0].clientX
       var y = ev.touches[0].clientY
-      if (eraserEnabled) {
-        context.clearRect(x, y, 100, 100)
-      } else {
-        lastPoint = { x: x, y: y }
-      }
+      clearOrPoint(x, y)
     }
     canvas.ontouchmove = function (ev) {
       var x = ev.touches[0].clientX
       var y = ev.touches[0].clientY
-      if (using) { // 且状态与或状态
-        if (eraserEnabled) {
-          context.clearRect(x, y, 100, 100)
-        } else {
-          var newPoint = { x: x, y: y }
-          drawLine(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y)
-          lastPoint = newPoint
-        }
-      }
+      clearOrDraw(x, y, using)
     }
-    canvas.ontouchend = function (ev) {
+    canvas.ontouchend = function () {
       using = false
     }
-
   } else {
     canvas.onmousedown = function (ev) {
       using = true
       var x = ev.clientX // x,y相对于视口的位置
       var y = ev.clientY
-      //console.log(eraserEnabled)
-      if (eraserEnabled) {
-        context.clearRect(x, y, 100, 100)
-      } else {
-        lastPoint = { x: x, y: y }
-      }
+      clearOrPoint(x, y)
     }
     canvas.onmousemove = function (ev) {
       var x = ev.clientX
       var y = ev.clientY
-      if (using) { // 且状态与或状态
-        if (eraserEnabled) {
-          context.clearRect(x, y, 100, 100)
-        } else {
-          var newPoint = { x: x, y: y }
-          drawLine(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y)
-          lastPoint = newPoint
-        }
-      }
+      clearOrDraw(x, y, using)
     }
-    canvas.onmouseup = function (ev) {
+    canvas.onmouseup = function () {
       using = false
     }
   }
@@ -110,6 +83,26 @@ function autoSetCanvasSize(canvas) {
     var pageHeight = document.documentElement.clientHeight
     canvas.width = pageWidth
     canvas.height = pageHeight
+  }
+}
+//绘制或清除坐标点
+function clearOrPoint(x, y) {
+  if (eraserEnabled) {
+    context.clearRect(x, y, 100, 100)
+  } else {
+    lastPoint = { x: x, y: y }
+  }
+}
+//绘制或清除线
+function clearOrDraw(x, y, using) {
+  if (using) { // 且状态与或状态
+    if (eraserEnabled) {
+      context.clearRect(x, y, 100, 100)
+    } else {
+      var newPoint = { x: x, y: y }
+      drawLine(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y)
+      lastPoint = newPoint
+    }
   }
 }
 // 设置画笔颜色
