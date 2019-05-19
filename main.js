@@ -16,6 +16,18 @@ eraser.onclick = function () {
   eraser.classList.add('active')
   pen.classList.remove('active')
 }
+clear.onclick = function () {
+  context.clearRect(0, 0, canvas.width, canvas.height)
+}
+download.onclick = function (){
+  var url = canvas.toDataURL('image/png')
+  var a = document.createElement('a')
+  document.body.appendChild(a)
+  a.href = url
+  a.download = 'My Paint' 
+  a.click()
+}
+
 
 black.onclick = function () {
   context.strokeStyle = 'black'
@@ -40,6 +52,8 @@ function strokeColor(addClass, rmClass1, rmClass2, rmClass3) {
   rmClass2.classList.remove('active')
   rmClass3.classList.remove('active')
 }
+
+
 
 function listenToUser(canvas) {
   var lastPoint = { x: undefined, y: undefined }
